@@ -35,47 +35,120 @@ class TPMSensorEntityDescription(SensorEntityDescription):
     dpid: str | None = None
     offset: int | None = None
 
-# keys correspond to property names in aqualogic.core.AquaLogic
 SENSOR_TYPES: tuple[TPMSensorEntityDescription, ...] = (
     TPMSensorEntityDescription(
         key="tuya_pm_phase_a",
         name="Tuya Power Meter Phase A power",
         dpid="101",
         offset=8,
-        unit_of_measurement = UnitOfPower.WATT,
-        device_class=SensorDeviceClass.POWER,
     ),
     TPMSensorEntityDescription(
         key="tuya_pm_phase_b",
         name="Tuya Power Meter Phase B power",
         dpid="102",
         offset=8,
-        unit_of_measurement = UnitOfPower.WATT,
-        device_class=SensorDeviceClass.POWER,
     ),
     TPMSensorEntityDescription(
         key="tuya_pm_phase_c",
         name="Tuya Power Meter Phase C power",
         dpid="103",
         offset=8,
-        unit_of_measurement = UnitOfPower.WATT,
-        device_class=SensorDeviceClass.POWER,
     ),
     TPMSensorEntityDescription(
         key="tuya_pm_ch1_power",
         name="Tuya Power Meter Ch 1 power",
         dpid="105",
         offset=2,
-        unit_of_measurement = UnitOfPower.WATT,
-        device_class=SensorDeviceClass.POWER,
     ),
     TPMSensorEntityDescription(
         key="tuya_pm_ch2_power",
         name="Tuya Power Meter Ch 2 power",
         dpid="105",
         offset=7,
-        unit_of_measurement = UnitOfPower.WATT,
-        device_class=SensorDeviceClass.POWER,
+    ),
+    TPMSensorEntityDescription(
+        key="tuya_pm_ch3_power",
+        name="Tuya Power Meter Ch 3 power",
+        dpid="105",
+        offset=12,
+    ),
+    TPMSensorEntityDescription(
+        key="tuya_pm_ch4_power",
+        name="Tuya Power Meter Ch 4 power",
+        dpid="105",
+        offset=17,
+    ),
+    TPMSensorEntityDescription(
+        key="tuya_pm_ch5_power",
+        name="Tuya Power Meter Ch 5 power",
+        dpid="105",
+        offset=22,
+    ),
+    TPMSensorEntityDescription(
+        key="tuya_pm_ch6_power",
+        name="Tuya Power Meter Ch 6 power",
+        dpid="105",
+        offset=27,
+    ),
+    TPMSensorEntityDescription(
+        key="tuya_pm_ch7_power",
+        name="Tuya Power Meter Ch 7 power",
+        dpid="105",
+        offset=32,
+    ),
+    TPMSensorEntityDescription(
+        key="tuya_pm_ch8_power",
+        name="Tuya Power Meter Ch 8 power",
+        dpid="105",
+        offset=37,
+    ),
+    TPMSensorEntityDescription(
+        key="tuya_pm_ch9_power",
+        name="Tuya Power Meter Ch 9 power",
+        dpid="105",
+        offset=42,
+    ),
+    TPMSensorEntityDescription(
+        key="tuya_pm_ch10_power",
+        name="Tuya Power Meter Ch 10 power",
+        dpid="105",
+        offset=47,
+    ),
+    TPMSensorEntityDescription(
+        key="tuya_pm_ch11_power",
+        name="Tuya Power Meter Ch 11 power",
+        dpid="105",
+        offset=52,
+    ),
+    TPMSensorEntityDescription(
+        key="tuya_pm_ch12_power",
+        name="Tuya Power Meter Ch 12 power",
+        dpid="105",
+        offset=57,
+    ),
+    TPMSensorEntityDescription(
+        key="tuya_pm_ch13_power",
+        name="Tuya Power Meter Ch 13 power",
+        dpid="105",
+        offset=62,
+    ),
+    TPMSensorEntityDescription(
+        key="tuya_pm_ch14_power",
+        name="Tuya Power Meter Ch 14 power",
+        dpid="105",
+        offset=67,
+    ),
+    TPMSensorEntityDescription(
+        key="tuya_pm_ch15_power",
+        name="Tuya Power Meter Ch 15 power",
+        dpid="105",
+        offset=72,
+    ),
+    TPMSensorEntityDescription(
+        key="tuya_pm_ch16_power",
+        name="Tuya Power Meter Ch 16 power",
+        dpid="105",
+        offset=77,
     ),
 )
 
@@ -83,7 +156,7 @@ SENSOR_KEYS: list[str] = [desc.key for desc in SENSOR_TYPES]
 
 PLATFORM_SCHEMA = SENSOR_PLATFORM_SCHEMA.extend(
     {
-        vol.Required(CONF_MONITORED_CONDITIONS, default=SENSOR_KEYS): vol.All(
+        vol.Optional(CONF_MONITORED_CONDITIONS, default=SENSOR_KEYS): vol.All(
             cv.ensure_list, [vol.In(SENSOR_KEYS)]
         )
     }
@@ -98,12 +171,10 @@ async def async_setup_platform(
 ) -> None:
     """Set up the sensor platform."""
     processor: TuyaPowerMeterProcessor = hass.data[DOMAIN]
-    monitored_conditions = config[CONF_MONITORED_CONDITIONS]
 
     entities = [
         TPMSensor(processor, description)
         for description in SENSOR_TYPES
-        if description.key in monitored_conditions
     ]
 
     async_add_entities(entities)
@@ -124,7 +195,8 @@ class TPMSensor(SensorEntity):
         self.entity_description = description
         self._processor = processor
         self._attr_name = f"{description.name}"
-        self._attr_native_unit_of_measurement = description.unit_of_measurement
+        self._attr_native_unit_of_measurement = UnitOfPower.WATT
+        self._attr_device_class = SensorDeviceClass.POWER
 
     async def async_added_to_hass(self) -> None:
         """Register callbacks."""
