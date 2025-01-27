@@ -1,4 +1,4 @@
-"""Support for AquaLogic devices."""
+"""Support for Tuya Power Meter devices."""
 
 from __future__ import annotations
 
@@ -27,8 +27,6 @@ from homeassistant.core import Event, HomeAssistant
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.dispatcher import dispatcher_send
 from homeassistant.helpers.typing import ConfigType
-
-from monitor import TuyaPowerMeter
 
 _LOGGER = logging.getLogger(__name__)
 
