@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-from datetime import timedelta
 import logging
 import threading
-import tinytuya
 import time
+
+from .tinytuya import ( TuyaPowerMeter )
 
 import voluptuous as vol
 
@@ -87,7 +87,7 @@ class TuyaPowerMeterProcessor(threading.Thread):
     def run(self) -> None:
         """Event thread."""
 
-        self._device = tinytuya.TuyaPowerMeter(self._dev_id, self._host, self._local_key, persist=True)   #d = tinytuya.TuyaPowerMeter('bf45e66d762501adaftyu8', '192.168.0.101', "qjOg:<Pt'J3QgX9[", persist=True)
+        self._device = TuyaPowerMeter(self._dev_id, self._host, self._local_key, persist=True)   #d = tinytuya.TuyaPowerMeter('bf45e66d762501adaftyu8', '192.168.0.101', "qjOg:<Pt'J3QgX9[", persist=True)
         self._device._get_socket(False)
         self._heartbeat_time = time.time() + self.KEEPALIVE_TIMER
         self._update_time = time.time() + self.OFFLINE_TIMER
