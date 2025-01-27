@@ -124,6 +124,7 @@ class TPMSensor(SensorEntity):
         self.entity_description = description
         self._processor = processor
         self._attr_name = f"{description.name}"
+        self._attr_native_unit_of_measurement = description.unit_of_measurement
 
     async def async_added_to_hass(self) -> None:
         """Register callbacks."""
