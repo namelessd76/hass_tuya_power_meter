@@ -1,0 +1,10 @@
+{
+    "domain": "TuyaPowerMeter",
+    "name": "Tuya Power Meter",
+    "codeowners": [],
+    "documentation": "",
+    "config_flow": true,
+    "iot_class": "local_push",
+    "requirements": [],
+    "dependencies": []
+}
