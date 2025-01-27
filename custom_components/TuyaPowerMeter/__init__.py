@@ -36,7 +36,7 @@ CONFIG_SCHEMA = vol.Schema(
             {
                 vol.Required(CONF_HOST): cv.string,
                 vol.Required(CONF_ID): cv.string,
-                vol.Required(CONF_API_KEY): cv.strig
+                vol.Required(CONF_API_KEY): cv.string
             }
         )
     },
